@@ -3,7 +3,7 @@
     "channel": "beta",
     "released": "2026-03-19",
     "url": "https://raw.githubusercontent.com/space-ctrl-dot-co/Gridshare-node/main/releases/beta/gridshare_install.py",
-    "sha256": "823fa776628fe578962e45b1130024a0fb5b97bc9d6dde95d2c2bd6e1b58431d",
+    "sha256": "987f46520ddb9c04ec98a715aed42d8c8b8fc22069ef1c14418b5f749ecc6370",
     "min_python": "3.10",
     "release_notes": "Initial release. Encrypted inference, subprocess sandbox, auto-update channel."
 }
