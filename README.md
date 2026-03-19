@@ -1,77 +1,71 @@
-# GridShare Node
-**Distributed AI compute network — node software**
+# GridShare_Setup.exe
 
-[![Status](https://img.shields.io/badge/status-MVP%20live-brightgreen)](https://github.com/space-ctrl-dot-co/Gridshare-node)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/space-ctrl-dot-co/Gridshare-node/releases)
-
-Turn idle laptops into revenue-generating AI inference nodes.
-Requesters get affordable AI. Providers earn GRID tokens.
+Single executable for the spare machine.
+No Python, no dependencies, no internet setup required on the spare machine.
+Double-click and it runs.
 
 ---
 
-## Quick install (Windows)
+## What it does (in order)
 
-```bash
-# Download gridshare_install.py from releases/stable/ then:
-python gridshare_install.py
-```
-
-One file. Checks your hardware, downloads the right model, sets up auto-start.
+1. **Checks internet** — confirms GitHub is reachable
+2. **Pulls latest installer** from `github.com/space-ctrl-dot-co/Gridshare-node`
+   - Downloads `releases/stable/gridshare_install.py`
+   - Verifies the SHA-256 checksum before doing anything
+3. **Finds your host machine** automatically
+   - Scans the local network for a running GridShare node (port 8080)
+   - If not found, asks you to enter the IP manually
+4. **Runs the test suite**
+   - Ping / connectivity check
+   - Models endpoint
+   - Encryption pubkey exchange
+   - Full inference round-trip: sends `12 × 8 = ?`, expects `96`
+   - Reports latency for each phase
+5. **Installs the GridShare node on the spare machine**
+   - Runs the installer (checks hardware, downloads model, sets up auto-start)
+   - Optional — can be skipped
+6. **Prints a summary** — green ticks or warnings for each step
 
 ---
 
-## Update channels
+## How to build the .exe (on your main Windows machine)
 
-| Channel | Version | URL |
-|---------|---------|-----|
-| Stable | 0.1.0 | `releases/stable/version.json` |
-| Beta | 0.1.0 | `releases/beta/version.json` |
-
-Nodes check for updates on every startup via the raw GitHub URLs.
-To publish a new release: bump version in `version.json`, update the SHA-256, push.
-
----
-
-## Repo structure
+**You need:** Python 3.10+, internet access, ~5 minutes.
 
 ```
-releases/
-  stable/
-    version.json          # update channel manifest
-    gridshare_install.py  # installer for stable channel
-  beta/
-    version.json
-    gridshare_install.py
-updater.py                # standalone auto-update client
-README.md
+# Option A: one-click
+Double-click build_exe.bat
+
+# Option B: manual
+pip install pyinstaller
+pyinstaller gridshare_setup.spec --clean --noconfirm
 ```
 
----
+Output: `dist\GridShare_Setup.exe` (~8-12 MB)
 
-## What the installer does
-
-1. Checks Python 3.10+ and pip
-2. Reads hardware — RAM, disk, CPU, GPU
-3. Picks the right model (Phi-3.5 Mini or Llama 3.2 3B)
-4. Installs all Python dependencies
-5. Downloads the model file (~2.4 GB)
-6. Generates a node keypair (your identity on the network)
-7. Writes `server.py`, `inference_worker.py`, `updater.py` to `%APPDATA%\\GridShare\\`
-8. Creates a Windows startup entry — node runs in background on boot
-9. Verifies installation
-10. Prints node ID and connection details
+Copy `GridShare_Setup.exe` to the spare machine (USB, network share, email).
+The spare machine needs **no Python** and **no setup** — just double-click.
 
 ---
 
-## Architecture
+## Before running on the spare machine
 
-- **Encryption**: NaCl Box — prompts encrypted end-to-end, providers never see plaintext
-- **Sandbox**: Subprocess isolation (MVP) → Wasmtime WASM (Phase 1)
-- **API**: OpenAI-compatible — drop-in replacement, change one URL
-- **Updates**: SHA-256 verified, silent, wireless
+Make sure the host machine (your laptop) is running the GridShare server:
+```
+cd %APPDATA%\GridShare
+python server.py
+```
 
-Full specification: `GridShare_Specification_v0.2.docx` (see project files)
+The exe will scan the local network and find it automatically if both machines
+are on the same Wi-Fi or ethernet network.
 
 ---
 
-*Part of the GridShare project — [spacectrl.co](https://www.spacectrl.co)*
+## Files
+
+| File | Purpose |
+|------|---------|
+| `gridshare_setup.py` | Source — the Python script that becomes the exe |
+| `gridshare_setup.spec` | PyInstaller build config |
+| `build_exe.bat` | One-click build script |
+| `dist/GridShare_Setup.exe` | The output — copy this to the spare machine |
