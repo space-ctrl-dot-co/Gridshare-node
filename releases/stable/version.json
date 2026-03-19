@@ -1,0 +1,9 @@
+{
+    "version": "0.1.0",
+    "channel": "stable",
+    "released": "2026-03-19",
+    "url": "https://raw.githubusercontent.com/space-ctrl-dot-co/Gridshare-node/main/releases/stable/gridshare_install.py",
+    "sha256": "823fa776628fe578962e45b1130024a0fb5b97bc9d6dde95d2c2bd6e1b58431d",
+    "min_python": "3.10",
+    "release_notes": "Initial release. Encrypted inference, subprocess sandbox, auto-update channel."
+}
